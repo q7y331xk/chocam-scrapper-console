@@ -18,7 +18,7 @@ def create_calculated_table_if_exists_drop(calculated_table):
         location TEXT,\
         main TEXT,\
         views INT,\
-        date TEXT,\
+        date DATETIME,\
         likes TEXT,\
         comments_cnt INT,\
         comments TEXT,\

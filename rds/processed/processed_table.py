@@ -18,7 +18,7 @@ def create_processed_table_if_exists_drop(processed_table):
         location TEXT,\
         main TEXT,\
         views INT,\
-        date TEXT,\
+        date DATETIME,\
         likes TEXT,\
         comments_cnt INT,\
         comments TEXT,\

@@ -17,7 +17,7 @@ def create_raw_table_if_exists_drop(raw_table):
         location TEXT,\
         main TEXT,\
         views INT,\
-        date TEXT,\
+        date DATETIME,\
         likes TEXT,\
         comments_cnt INT,\
         comments TEXT\
