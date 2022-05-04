@@ -1,8 +1,8 @@
+# 어떤 키워드들은 variables.py에 있다.
 # OPTIONS
 OPTION_NEW_TABLE = False
 SILENCE = False
 SERVICE_FEE = 50000
-# 검색어는 korean euc-kr encode
 
 # RDS
 RDS_HOST = 'oden-second-hands-selling.ctj9mgachfi3.ap-northeast-2.rds.amazonaws.com'
@@ -14,7 +14,6 @@ RDS_PROCESSED_TABLE = 'current_processed'
 RDS_CALCULATED_TABLE = 'current_calculated'
 
 # EXCEL
-EXCEL_RDS_READ_TABLE = 'current_calculated'
 EXCEL_FILE_NAME = 'current_calculated1'
 EXCEL_SAVE_PATH = f"/Users/duckyounglee/Documents/{EXCEL_FILE_NAME}.xlsx"
 
