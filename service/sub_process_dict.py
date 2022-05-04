@@ -72,38 +72,31 @@ def extract_status(processed_datum):
 def extract_use_cnt(processed_datum):
     title = processed_datum['title']
     main = processed_datum['main']
+    use_cnt = -1
     if processed_datum['condition'] == '미개봉':
-        processed_datum['use_cnt'] = 0
-        return 
+        use_cnt = 0
     if match_keywords(title, TITLE_NEW_KEYWORDS):
-        processed_datum['use_cnt'] = 0
-        return
+        use_cnt = 0
     if match_keywords(main, MAIN_NEW_KEYWORDS):
-        processed_datum['use_cnt'] = 0
-        return
+        use_cnt = 0
     found_hoe = re.search(r"[0-9]+회", main)
     if found_hoe:
-        processed_datum['use_cnt'] = int(found_hoe.group().replace('회', ''))
-        return
+        use_cnt = int(found_hoe.group().replace('회', ''))
     found_bun = re.search(r"[0-9]+번", main)
     if found_bun:
-        processed_datum['use_cnt'] = int(found_bun.group().replace('번', ''))
-        return
+        use_cnt = int(found_bun.group().replace('번', ''))
     if match_keywords(main, ['한번']):
-        processed_datum['use_cnt'] = 1
-        return
+        use_cnt = 1
     if match_keywords(main, ['두번']):
-        processed_datum['use_cnt'] = 2
-        return
+        use_cnt = 2
     if match_keywords(main, ['세번']):
-        processed_datum['use_cnt'] = 3
-        return
-    return -1
+        use_cnt = 3
+    processed_datum['use_cnt'] = use_cnt
 
-def extract_brand_model(models, processed_datum, default=None):
+def extract_brand_model(keywords_models, processed_datum, default=None):
     brand = default
     model_name = default
-    for model in models:
+    for model in keywords_models:
         if model["additional_keywords"]:
             keywords = [model["model_name"]] + model["additional_keywords"]
         else:
@@ -185,3 +178,35 @@ def extract_set(keywords_set, processed_datum):
         elif match_keywords(main, keywords_set):
             set = 1
     processed_datum["set"] = set
+    
+def extract_div(keywords_divs, processed_datum):
+    main = processed_datum['main']
+    processed_datum["div"] = match_keywords(main, keywords_divs, '.')
+    
+def extract_gu(keywords_gus, processed_datum):
+    main = processed_datum['main']
+    processed_datum["gu"] = match_keywords(main, keywords_gus, '.')
+    
+def extract_color(keywords_colors, processed_datum):
+    main = processed_datum['main']
+    processed_datum["color"] = match_keywords(main, keywords_colors, '.')
+
+def extract_grade(processed_datum):
+    grade = 'U'
+    if processed_datum['jangbak'] == 1:
+        grade = 'F'
+    elif processed_datum['use_cnt'] == 0:
+        grade = 'A'
+    elif processed_datum['use_cnt'] == 1:
+        grade = 'B'
+    elif processed_datum['use_cnt'] == 2:
+        grade = 'B'
+    elif processed_datum['use_cnt'] == 3:
+        grade = 'C'
+    elif processed_datum['use_cnt'] == 4:
+        grade = 'C'
+    elif processed_datum['use_cnt'] == 5:
+        grade = 'C'
+    elif processed_datum['use_cnt'] >= 6:
+        grade = 'D'
+    processed_datum['grade'] = grade

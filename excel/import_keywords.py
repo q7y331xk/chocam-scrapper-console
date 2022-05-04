@@ -9,12 +9,13 @@ def import_models(wb):
         brand = row[0].value
         model_name = row[1].value
         additional_keywords_str = row[2].value
+        fair_price = row[3].value
         if additional_keywords_str:
             additional_keywords = additional_keywords_str.split(',')
         else:
             additional_keywords = additional_keywords_str
         if model_name:
-            model = dict(brand=brand, model_name=model_name, additional_keywords=additional_keywords)
+            model = dict(brand=brand, model_name=model_name, additional_keywords=additional_keywords, fair_price=fair_price)
             models.append(model)
     return models
 
