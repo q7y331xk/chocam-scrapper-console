@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from selenium.webdriver.common.by import By
 from time import sleep
 
 def get_article_ids(driver):
@@ -75,6 +76,12 @@ def convert_soup_to_dict(pdp_soup_obj):
             detail_content = detail_content.text.strip().replace('  ', '').replace('\n', '')
         details.append({f'{detail_title}': f'{detail_content}'})
     pdp_dict['details'] = details
+    phone = pdp_soup.find('p', {'class':'tell'})
+    if phone:
+        pdp_dict['phone'] = phone.text.strip()
+    else:
+        pdp_dict['phone'] = 'chat'
+
     nickname = pdp_soup.find('div', {'class':'nick_box'})
     if nickname:
         pdp_dict['nickname'] = nickname.text.strip()
@@ -103,6 +110,44 @@ def convert_soup_to_dict(pdp_soup_obj):
         pdp_dict['likes'] = int(likes.text)
     return pdp_dict
 
+def get_safe_phone(driver):
+    driver.find_element(By.CLASS_NAME,'btn_text').click()
+    i = 0
+    while(i < 50):
+        sleep(0.1)
+        pdp_soup = BeautifulSoup(driver.page_source, 'html.parser')
+        phone = pdp_soup.find('p', {'class':'tell'})
+        phone_strip = phone.text.strip()
+        if phone_strip != '***-****-****':
+            idx = phone_strip.find('0505')
+            safe_phone = phone_strip[idx : idx + 13]
+            return safe_phone
+        i = i + 1
+    
+def get_chat_link(driver):
+    driver.find_element(By.CLASS_NAME,'type_chat').click()
+    sleep(1)
+    driver.switch_to.window(driver.window_handles[-1])
+    i = 0
+    while(i < 50):
+        sleep(0.1)
+        chat_url = driver.current_url
+        if chat_url.find('talk') > 0:
+            # driver.find_element(By.CLASS_NAME,'btn_send').click()
+            sleep(0.1)
+            driver.close()
+            break
+        i = i + 1
+    j = 0
+    while (j < 50):
+        sleep(0.1)
+        driver.switch_to.window(driver.window_handles[0])
+        base_url = driver.current_url
+        if base_url.find('talk') < 0:
+            break
+        j = j + 1
+    return chat_url
+
 def get_pdp_dicts(driver, article_ids):
     pdp_dicts = []
     for article_id in article_ids:
@@ -110,5 +155,9 @@ def get_pdp_dicts(driver, article_ids):
         if pdp_soup_obj["pdp_soup"] == 'pass':
             continue
         pdp_dict = convert_soup_to_dict(pdp_soup_obj)
+        if pdp_dict["phone"] == '***-****-****':
+            pdp_dict["phone"] = get_safe_phone(driver)
+        # if pdp_dict["phone"] == 'chat':
+            # pdp_dict["phone"] = get_chat_link(driver)
         pdp_dicts.append(pdp_dict)
     return pdp_dicts

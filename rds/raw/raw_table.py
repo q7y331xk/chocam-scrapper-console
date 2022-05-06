@@ -20,7 +20,8 @@ def create_raw_table_if_exists_drop(raw_table):
         date DATETIME,\
         likes TEXT,\
         comments_cnt INT,\
-        comments TEXT\
+        comments TEXT,\
+        phone TEXT\
     )")
     conn.commit()
 
@@ -44,7 +45,8 @@ def write_raw_table(raw_dicts, raw_table):
             \"{raw_dict['date']}\",\
             \"{raw_dict['likes']}\",\
             \"{raw_dict['comments_cnt']}\",\
-            \"{raw_dict['comments']}\"\
+            \"{raw_dict['comments']}\",\
+            \"{raw_dict['phone']}\"\
         )")
     conn.commit()
 

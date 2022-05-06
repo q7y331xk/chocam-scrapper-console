@@ -22,6 +22,7 @@ def create_processed_table_if_exists_drop(processed_table):
         likes TEXT,\
         comments_cnt INT,\
         comments TEXT,\
+        phone TEXT,\
         `div` TEXT,\
         `gu` TEXT,\
         `color` TEXT,\
@@ -60,6 +61,7 @@ def write_processed_table(processed_dicts, processed_table):
             \"{processed_dict['likes']}\",\
             \"{processed_dict['comments_cnt']}\",\
             \"{processed_dict['comments']}\",\
+            \"{processed_dict['phone']}\",\
             \"{processed_dict['div']}\",\
             \"{processed_dict['gu']}\",\
             \"{processed_dict['color']}\",\

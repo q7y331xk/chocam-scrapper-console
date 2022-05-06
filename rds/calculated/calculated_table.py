@@ -22,6 +22,7 @@ def create_calculated_table_if_exists_drop(calculated_table):
         likes TEXT,\
         comments_cnt INT,\
         comments TEXT,\
+        phone TEXT,\
         `div` TEXT,\
         `gu` TEXT,\
         `color` TEXT,\
@@ -61,6 +62,7 @@ def write_calculated_table(calculated_dicts, calculated_table):
             \"{calculated_dict['likes']}\",\
             \"{calculated_dict['comments_cnt']}\",\
             \"{calculated_dict['comments']}\",\
+            \"{calculated_dict['phone']}\",\
             \"{calculated_dict['div']}\",\
             \"{calculated_dict['gu']}\",\
             \"{calculated_dict['color']}\",\
