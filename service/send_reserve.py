@@ -4,9 +4,9 @@ from time import sleep
 import requests
 import json
 from selenium.webdriver.common.by import By
-from config import PROFIT
+from config import NOTICE_PHONE, PROFIT
 
-def send_chat(driver, phone):
+def reserve_chat(driver, phone):
     driver.get(phone)
     i = 0
     while (i < 50):
@@ -17,15 +17,53 @@ def send_chat(driver, phone):
         i = i + 1
     sleep(1)
 
-def send_msg(phone, article_id):
+def reserve_msg(phone, article_id):
     send_url = 'https://apis.aligo.in/send/' 
     sms_data={'key': 'lojil01d9l07fj51lllttduubepsvwzf', #api key
             'userid': 'oden0317', # 알리고 사이트 아이디
             'sender': '01071416956', # 발신번호
-            'receiver': f'{phone}', # 수신번호 (,활용하여 1000명까지 추가 가능)
-            # 'receiver': '01099712502', # 수신번호 (,활용하여 1000명까지 추가 가능)
+            # 'receiver': f'{phone}', # 수신번호 (,활용하여 1000명까지 추가 가능)
+            'receiver': '01099712502', # 수신번호 (,활용하여 1000명까지 추가 가능)
             'msg': f'상품에 관심있어 연락드려요.https://cafe.naver.com/chocammall/{article_id}', #문자 내용 
             'msg_type' : 'msg_type', #메세지 타입 (SMS, LMS)
+            #'rdate' : '예약날짜',
+            #'rtime' : '예약시간',
+            #'testmode_yn' : '' #테스트모드 적용 여부 Y/N
+    }
+    send_response = requests.post(send_url, data=sms_data)
+    # print (send_response.json())
+
+def notice_chat(phone, article_id, dict):
+    profit = dict['profit']
+    model = dict['model']
+    use_cnt = dict['use_cnt']
+    link = f'https://cafe.naver.com/chocammall/{article_id}'
+    send_url = 'https://apis.aligo.in/send/' 
+    sms_data={'key': 'lojil01d9l07fj51lllttduubepsvwzf', #api key
+            'userid': 'oden0317', # 알리고 사이트 아이디
+            'sender': '01071416956', # 발신번호
+            'receiver': NOTICE_PHONE, # 수신번호 (,활용하여 1000명까지 추가 가능)
+            'msg': f'모델명: {model}({use_cnt})\n이익: {profit}\n제품 링크: {link}\n채팅 링크: {phone}', #문자 내용 
+            'msg_type' : 'lms_type', #메세지 타입 (SMS, LMS)
+            #'rdate' : '예약날짜',
+            #'rtime' : '예약시간',
+            #'testmode_yn' : '' #테스트모드 적용 여부 Y/N
+    }
+    send_response = requests.post(send_url, data=sms_data)
+    print (send_response.json())
+
+def notice_msg(phone, article_id, dict):
+    profit = dict['profit']
+    model = dict['model']
+    use_cnt = dict['use_cnt']
+    link = f'https://cafe.naver.com/chocammall/{article_id}'
+    send_url = 'https://apis.aligo.in/send/' 
+    sms_data={'key': 'lojil01d9l07fj51lllttduubepsvwzf', #api key
+            'userid': 'oden0317', # 알리고 사이트 아이디
+            'sender': '01071416956', # 발신번호
+            'receiver': NOTICE_PHONE, # 수신번호 (,활용하여 1000명까지 추가 가능)
+            'msg': f'모델명: {model}({use_cnt})\n이익: {profit}\n제품 링크: {link}\n휴대폰 번호: {phone}', #문자 내용 
+            'msg_type' : 'lms_type', #메세지 타입 (SMS, LMS)
             #'rdate' : '예약날짜',
             #'rtime' : '예약시간',
             #'testmode_yn' : '' #테스트모드 적용 여부 Y/N
@@ -39,11 +77,13 @@ def send_reserve(dict, driver, profit):
     if dict['profit']:
         if dict['profit'] > profit:
             if phone.find('talk') > 0:
-                send_chat(driver, phone)
+                reserve_chat(driver, phone)
+                notice_chat(phone, article_id, dict)
                 print('reserved with chat')
             else:
                 phone_remove_hypen = phone.replace('-','')
-                send_msg(phone_remove_hypen, article_id)
+                reserve_msg(phone_remove_hypen, article_id)
+                notice_msg(phone_remove_hypen, article_id, dict)
                 print('reserved with msg')
             dict['reserve'] = 100
     else:

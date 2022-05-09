@@ -2,6 +2,8 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
 from time import sleep
 
+from config import CHAT_RESERVE
+
 def get_article_ids(driver):
     article_ids = []
     driver.get(f"https://cafe.naver.com/chocammall?iframe_url=/ArticleList.nhn%3Fsearch.clubid=20486145%26search.menuid=214%26search.boardtype=L")
@@ -133,7 +135,6 @@ def get_chat_link(driver):
         sleep(0.1)
         chat_url = driver.current_url
         if chat_url.find('talk') > 0:
-            # driver.find_element(By.CLASS_NAME,'btn_send').click()
             sleep(0.1)
             driver.close()
             break
@@ -157,7 +158,8 @@ def get_pdp_dicts(driver, article_ids):
         pdp_dict = convert_soup_to_dict(pdp_soup_obj)
         if pdp_dict["phone"] == '***-****-****':
             pdp_dict["phone"] = get_safe_phone(driver)
-        # if pdp_dict["phone"] == 'chat':
-            # pdp_dict["phone"] = get_chat_link(driver)
+        if CHAT_RESERVE:
+            if pdp_dict["phone"] == 'chat':
+                pdp_dict["phone"] = get_chat_link(driver)
         pdp_dicts.append(pdp_dict)
     return pdp_dicts
