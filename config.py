@@ -1,3 +1,6 @@
+# 현재 챗은 CHAT_RESERVE = False로 막아둠
+# 구매 예약 문자는 다 내폰으로
+
 # 어떤 키워드들은 variables.py에 있다.
 # OPTIONS
 OPTION_NEW_TABLE = False

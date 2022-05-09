@@ -9,5 +9,3 @@ def create_tables_if_exists_drop(raw_table, processed_table, calculated_table, r
     create_processed_table_if_exists_drop(processed_table)
     create_calculated_table_if_exists_drop(calculated_table)
     create_reserved_table_if_exists_drop(reserved_table)
-
-create_tables_if_exists_drop(RDS_RAW_TABLE, RDS_PROCESSED_TABLE, RDS_CALCULATED_TABLE, RDS_RESERVED_TABLE)

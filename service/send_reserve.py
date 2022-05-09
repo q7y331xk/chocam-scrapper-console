@@ -50,7 +50,6 @@ def notice_chat(phone, article_id, dict):
             #'testmode_yn' : '' #테스트모드 적용 여부 Y/N
     }
     send_response = requests.post(send_url, data=sms_data)
-    print (send_response.json())
 
 def notice_msg(phone, article_id, dict):
     profit = dict['profit']
@@ -69,7 +68,6 @@ def notice_msg(phone, article_id, dict):
             #'testmode_yn' : '' #테스트모드 적용 여부 Y/N
     }
     send_response = requests.post(send_url, data=sms_data)
-    print (send_response.json())
 
 def send_reserve(dict, driver, profit):
     phone = dict['phone']
@@ -86,8 +84,10 @@ def send_reserve(dict, driver, profit):
                 notice_msg(phone_remove_hypen, article_id, dict)
                 print('reserved with msg')
             dict['reserve'] = 100
+        else:
+            dict['reserve'] = 300 # expensive
     else:
-        dict['reserve'] = 200
+        dict['reserve'] = 400 # no model fair price
 
 def send_reserve_all(driver, dicts_calculated, reserve):
     dicts_reserved = []
