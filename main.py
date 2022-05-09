@@ -12,7 +12,7 @@ from service.calculate_dicts import calculate_dicts
 from service.find_new_article import find_new_article_ids
 from service.process_dicts import process_dicts
 from service.raw_dicts import minimum_dicts
-from service.send_reserve import send_chat, send_msg, send_reserve_all
+from service.send_reserve import send_reserve_all
 
 # change id and pw
 

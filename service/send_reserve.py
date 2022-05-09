@@ -44,7 +44,7 @@ def notice_chat(phone, article_id, dict):
             'sender': '01071416956', # 발신번호
             'receiver': NOTICE_PHONE, # 수신번호 (,활용하여 1000명까지 추가 가능)
             'msg': f'모델명: {model}({use_cnt})\n이익: {profit}\n제품 링크: {link}\n채팅 링크: {phone}', #문자 내용 
-            'msg_type' : 'lms_type', #메세지 타입 (SMS, LMS)
+            'msg_type' : 'sms_type', #메세지 타입 (SMS, LMS)
             #'rdate' : '예약날짜',
             #'rtime' : '예약시간',
             #'testmode_yn' : '' #테스트모드 적용 여부 Y/N
@@ -63,7 +63,7 @@ def notice_msg(phone, article_id, dict):
             'sender': '01071416956', # 발신번호
             'receiver': NOTICE_PHONE, # 수신번호 (,활용하여 1000명까지 추가 가능)
             'msg': f'모델명: {model}({use_cnt})\n이익: {profit}\n제품 링크: {link}\n휴대폰 번호: {phone}', #문자 내용 
-            'msg_type' : 'lms_type', #메세지 타입 (SMS, LMS)
+            'msg_type' : 'sms_type', #메세지 타입 (SMS, LMS)
             #'rdate' : '예약날짜',
             #'rtime' : '예약시간',
             #'testmode_yn' : '' #테스트모드 적용 여부 Y/N
