@@ -6,10 +6,11 @@
 OPTION_NEW_TABLE = False
 SILENCE = False
 CHAT_RESERVE = False
-SERVICE_FEE = 150000
-PROFIT = 100000
+SERVICE_FEE = 0
+PROFIT = 0
 RESERVE = True # 지금은 테스트용으로 다 나한테 문자오게함
-NOTICE_PHONE = '01099712502'
+PRODUCT = False 
+NOTICE_PHONE = '01071416956'
 
 # RDS
 RDS_HOST = 'oden-second-hands-selling.ctj9mgachfi3.ap-northeast-2.rds.amazonaws.com'
