@@ -6,6 +6,9 @@ import json
 from selenium.webdriver.common.by import By
 from config import NOTICE_PHONE, PRODUCT, PROFIT
 from variables import SEOUL_GUS
+from config import TELE_API_KEY
+import telegram
+
 
 def reserve_chat(driver, phone):
     driver.get(phone)
@@ -31,34 +34,20 @@ def reserve_msg(phone, article_id):
     # print (send_response.json())
 
 def notice_chat(phone, article_id, dict):
-    profit = dict['profit']
     model = dict['model']
-    use_cnt = dict['use_cnt']
+    grade = dict['grade']
     link = f'https://cafe.naver.com/chocammall/{article_id}'
-    send_url = 'https://apis.aligo.in/send/' 
-    sms_data={'key': 'lojil01d9l07fj51lllttduubepsvwzf', #api key
-            'userid': 'oden0317', # 알리고 사이트 아이디
-            'sender': '01071416956', # 발신번호
-            'receiver': NOTICE_PHONE, # 수신번호 (,활용하여 1000명까지 추가 가능)
-            'msg': f'모델명: {model}({use_cnt})\n이익: {profit}\n제품 링크: {link}\n채팅 링크: {phone}', #문자 내용 
-            'msg_type' : 'sms_type', #메세지 타입 (SMS, LMS)
-    }
-    send_response = requests.post(send_url, data=sms_data)
+    bot = telegram.Bot(token = TELE_API_KEY)
+    text = f'모델명: {model}({grade})\n제품 링크: {link}\n채팅 링크: {phone}'
+    bot.sendMessage(chat_id = "5323620125", text=text)
 
 def notice_msg(phone, article_id, dict):
-    profit = dict['profit']
     model = dict['model']
-    use_cnt = dict['use_cnt']
+    grade = dict['grade']
     link = f'https://cafe.naver.com/chocammall/{article_id}'
-    send_url = 'https://apis.aligo.in/send/' 
-    sms_data={'key': 'lojil01d9l07fj51lllttduubepsvwzf', #api key
-            'userid': 'oden0317', # 알리고 사이트 아이디
-            'sender': '01071416956', # 발신번호
-            'receiver': NOTICE_PHONE, # 수신번호 (,활용하여 1000명까지 추가 가능)
-            'msg': f'모델명: {model}({use_cnt})\n이익: {profit}\n제품 링크: {link}\n휴대폰 번호: {phone}', #문자 내용 
-            'msg_type' : 'sms_type', #메세지 타입 (SMS, LMS)
-    }
-    send_response = requests.post(send_url, data=sms_data)
+    bot = telegram.Bot(token = TELE_API_KEY)
+    text = f'모델명: {model}({grade})\n제품 링크: {link}\n휴대폰 번호: {phone}'
+    bot.sendMessage(chat_id = "-1001660821686", text=text)
 
 def is_seoul(div, gu, seoul_gus):
     seoul = False
@@ -80,31 +69,35 @@ def send_reserve(dict, driver, profit):
     article_id = dict['article_id']
     div = dict['div']
     gu = dict['gu']
-    if dict['profit']:
-        if dict['profit'] > profit:
-            seoul = is_seoul(div, gu, SEOUL_GUS)
-            unknown = location_unknown(div, gu)
-            if seoul or unknown:
-                ####
-                if phone.find('talk') > 0:
-                    if PRODUCT:
-                        reserve_chat(driver, phone)
-                    notice_chat(phone, article_id, dict)
-                    print('reserved with chat')
+    status = dict['status']
+    if status == "판매":
+        if dict['profit']:
+            if dict['profit'] > profit:
+                seoul = is_seoul(div, gu, SEOUL_GUS)
+                unknown = location_unknown(div, gu)
+                if seoul or unknown:
+                    ####
+                    if phone.find('talk') > 0:
+                        if PRODUCT:
+                            reserve_chat(driver, phone)
+                        notice_chat(phone, article_id, dict)
+                        print('reserved with chat')
+                    else:
+                        phone_remove_hypen = phone.replace('-','')
+                        if PRODUCT:
+                            reserve_msg(phone_remove_hypen, article_id)
+                        notice_msg(phone_remove_hypen, article_id, dict)
+                        print('reserved with msg')
+                    return 100
+                ###
                 else:
-                    phone_remove_hypen = phone.replace('-','')
-                    if PRODUCT:
-                        reserve_msg(phone_remove_hypen, article_id)
-                    notice_msg(phone_remove_hypen, article_id, dict)
-                    print('reserved with msg')
-                return 100
-            ###
+                    return 301
             else:
-                return 301
+                return 300 # expensive
         else:
-            return 300 # expensive
+            return 401 # no model fair price
     else:
-        return 400 # no model fair price
+        return 402 # not for sale
 
 def send_reserve_all(driver, dicts_calculated, reserve):
     dicts_reserved = []

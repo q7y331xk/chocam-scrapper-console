@@ -46,4 +46,14 @@ def write(raw_table, processed_table, calculated_table, reserved_table, option_n
         write_reserved_table(dicts_reserved, reserved_table)
         print('added')
 
-write(RDS_RAW_TABLE, RDS_PROCESSED_TABLE, RDS_CALCULATED_TABLE, RDS_RESERVED_TABLE, OPTION_NEW_TABLE)
+def restart_if_error():
+    while(True):
+        try:
+            write(RDS_RAW_TABLE, RDS_PROCESSED_TABLE, RDS_CALCULATED_TABLE, RDS_RESERVED_TABLE, OPTION_NEW_TABLE)
+        except KeyboardInterrupt as error:
+            print("keybord: ", error)
+            break
+        except Exception:
+            print("some error")
+
+restart_if_error()
