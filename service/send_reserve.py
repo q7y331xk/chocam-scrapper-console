@@ -36,17 +36,19 @@ def reserve_msg(phone, article_id):
 def notice_chat(phone, article_id, dict):
     model = dict['model']
     grade = dict['grade']
+    cost = dict['cost']
     link = f'https://cafe.naver.com/chocammall/{article_id}'
     bot = telegram.Bot(token = TELE_API_KEY)
-    text = f'모델명: {model}({grade})\n제품 링크: {link}\n채팅 링크: {phone}'
+    text = f'모델명: {model}({grade})\n금액: {cost}\n제품 링크: {link}\n채팅 링크: {phone}'
     bot.sendMessage(chat_id = "5323620125", text=text)
 
 def notice_msg(phone, article_id, dict):
     model = dict['model']
     grade = dict['grade']
+    cost = dict['cost']
     link = f'https://cafe.naver.com/chocammall/{article_id}'
     bot = telegram.Bot(token = TELE_API_KEY)
-    text = f'모델명: {model}({grade})\n제품 링크: {link}\n휴대폰 번호: {phone}'
+    text = f'모델명: {model}({grade})\n금액: {cost}\n제품 링크: {link}\n휴대폰 번호: {phone}'
     bot.sendMessage(chat_id = "-1001660821686", text=text)
 
 def is_seoul(div, gu, seoul_gus):
