@@ -3,7 +3,7 @@
 
 # 어떤 키워드들은 variables.py에 있다.
 # OPTIONS
-OPTION_NEW_TABLE = False
+OPTION_NEW_TABLE = True
 SILENCE = False
 CHAT_RESERVE = False
 SERVICE_FEE = 0

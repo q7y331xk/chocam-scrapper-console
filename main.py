@@ -57,4 +57,5 @@ def restart_if_error():
         except Exception:
             tele(CHAT_ID_PRIORITY_ONE, "오류로 인한 크롤링 종료")
 
-restart_if_error()
+# restart_if_error()
+write(RDS_RAW_TABLE, RDS_PROCESSED_TABLE, RDS_CALCULATED_TABLE, RDS_RESERVED_TABLE, OPTION_NEW_TABLE)

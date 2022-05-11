@@ -37,6 +37,7 @@ def create_reserved_table_if_exists_drop(reserved_table):
         `vestibule` TEXT,\
         `set` TEXT,\
         `profit` TEXT,\
+        `fair_price` TEXT,\
         `reserve` TEXT\
     )")
     conn.commit()
@@ -78,6 +79,7 @@ def write_reserved_table(reserved_dicts, reserved_table):
             \"{reserved_dict['vestibule']}\",\
             \"{reserved_dict['set']}\",\
             \"{reserved_dict['profit']}\",\
+            \"{reserved_dict['fair_price']}\",\
             \"{reserved_dict['reserve']}\"\
         )")
     conn.commit()

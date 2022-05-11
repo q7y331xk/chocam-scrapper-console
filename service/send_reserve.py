@@ -4,7 +4,7 @@ from time import sleep
 import requests
 import json
 from selenium.webdriver.common.by import By
-from config import CHAT_ID_PRIORITY_ONE, NOTICE_PHONE, PRODUCT, PROFIT
+from config import CHAT_ID_PRIORITY_ONE, CHAT_ID_PRIORITY_TWO, NOTICE_PHONE, PRODUCT, PROFIT
 from variables import SEOUL_GUS
 from config import TELE_API_KEY
 import telegram
@@ -47,7 +47,25 @@ def notice_chat(phone, article_id, dict):
     text = f'모델명: {model}({grade})\n금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n채팅 링크: {phone}'
     tele(CHAT_ID_PRIORITY_ONE, text)
 
+def notice_chat2(phone, article_id, dict):
+    model = dict['model']
+    grade = dict['grade']
+    cost = dict['cost']
+    fair_price = dict['fair_price']
+    link = f'https://cafe.naver.com/chocammall/{article_id}'
+    text = f'모델명: {model}({grade})\n금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n채팅 링크: {phone}'
+    tele(CHAT_ID_PRIORITY_TWO, text)
+
 def notice_msg(phone, article_id, dict):
+    model = dict['model']
+    grade = dict['grade']
+    cost = dict['cost']
+    fair_price = dict['fair_price']
+    link = f'https://cafe.naver.com/chocammall/{article_id}'
+    text = f'모델명: {model}({grade})\n게시 금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n휴대폰 번호: {phone}'
+    tele(CHAT_ID_PRIORITY_TWO, text)
+
+def notice_msg2(phone, article_id, dict):
     model = dict['model']
     grade = dict['grade']
     cost = dict['cost']
@@ -79,7 +97,29 @@ def send_reserve(dict, driver, profit):
     status = dict['status']
     if status == "판매":
         if dict['profit']:
-            if dict['profit'] > profit:
+            if dict['profit'] > profit + 10000000:
+                print('priority 1')
+                seoul = is_seoul(div, gu, SEOUL_GUS)
+                unknown = location_unknown(div, gu)
+                if seoul or unknown:
+                    ####
+                    if phone.find('talk') > 0:
+                        if PRODUCT:
+                            reserve_chat(driver, phone)
+                        notice_chat2(phone, article_id, dict)
+                        print('reserved with chat')
+                    else:
+                        phone_remove_hypen = phone.replace('-','')
+                        if PRODUCT:
+                            reserve_msg(phone_remove_hypen, article_id)
+                        notice_msg2(phone_remove_hypen, article_id, dict)
+                        print('reserved with msg')
+                    return 100
+                ###
+                else:
+                    return 301
+            elif dict['profit'] > profit:
+                print('priority 2')
                 seoul = is_seoul(div, gu, SEOUL_GUS)
                 unknown = location_unknown(div, gu)
                 if seoul or unknown:
