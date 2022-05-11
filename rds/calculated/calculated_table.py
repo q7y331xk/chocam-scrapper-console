@@ -36,7 +36,8 @@ def create_calculated_table_if_exists_drop(calculated_table):
         `urethane` TEXT,\
         `vestibule` TEXT,\
         `set` TEXT,\
-        `profit` TEXT\
+        `profit` TEXT,\
+        `fair_price` TEXT\
     )")
     conn.commit()
 
@@ -76,6 +77,7 @@ def write_calculated_table(calculated_dicts, calculated_table):
             \"{calculated_dict['urethane']}\",\
             \"{calculated_dict['vestibule']}\",\
             \"{calculated_dict['set']}\",\
-            \"{calculated_dict['profit']}\"\
+            \"{calculated_dict['profit']}\",\
+            \"{calculated_dict['fair_price']}\"\
         )")
     conn.commit()

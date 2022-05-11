@@ -1,11 +1,12 @@
 def calc_price_with_model(model, service_fee):
     model_name = model['model_name']
+    filter_price = model['filter_price']
     fair_price = model['fair_price']
-    if fair_price:
-        target_price = fair_price - service_fee
+    if filter_price:
+        target_price = filter_price - service_fee
     else:
         target_price = None
-    price_with_model = dict(model=model_name, price=target_price)
+    price_with_model = dict(model=model_name, price=target_price, fair_price=fair_price)
     return price_with_model
 
 

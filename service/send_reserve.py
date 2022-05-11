@@ -4,7 +4,7 @@ from time import sleep
 import requests
 import json
 from selenium.webdriver.common.by import By
-from config import NOTICE_PHONE, PRODUCT, PROFIT
+from config import CHAT_ID_PRIORITY_ONE, NOTICE_PHONE, PRODUCT, PROFIT
 from variables import SEOUL_GUS
 from config import TELE_API_KEY
 import telegram
@@ -33,23 +33,28 @@ def reserve_msg(phone, article_id):
     send_response = requests.post(send_url, data=sms_data)
     # print (send_response.json())
 
+def tele(chat_id, text):
+    bot = telegram.Bot(token = TELE_API_KEY)
+    text = text
+    bot.sendMessage(chat_id=chat_id, text=text)
+
 def notice_chat(phone, article_id, dict):
     model = dict['model']
     grade = dict['grade']
     cost = dict['cost']
+    fair_price = dict['fair_price']
     link = f'https://cafe.naver.com/chocammall/{article_id}'
-    bot = telegram.Bot(token = TELE_API_KEY)
-    text = f'모델명: {model}({grade})\n금액: {cost}\n제품 링크: {link}\n채팅 링크: {phone}'
-    bot.sendMessage(chat_id = "5323620125", text=text)
+    text = f'모델명: {model}({grade})\n금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n채팅 링크: {phone}'
+    tele(CHAT_ID_PRIORITY_ONE, text)
 
 def notice_msg(phone, article_id, dict):
     model = dict['model']
     grade = dict['grade']
     cost = dict['cost']
+    fair_price = dict['fair_price']
     link = f'https://cafe.naver.com/chocammall/{article_id}'
-    bot = telegram.Bot(token = TELE_API_KEY)
-    text = f'모델명: {model}({grade})\n금액: {cost}\n제품 링크: {link}\n휴대폰 번호: {phone}'
-    bot.sendMessage(chat_id = "-1001660821686", text=text)
+    text = f'모델명: {model}({grade})\n게시 금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n휴대폰 번호: {phone}'
+    tele(CHAT_ID_PRIORITY_ONE, text)
 
 def is_seoul(div, gu, seoul_gus):
     seoul = False

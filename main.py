@@ -1,4 +1,4 @@
-from config import EXCEL_KEYWORDS_PATH, OPTION_NEW_TABLE, RDS_CALCULATED_TABLE, RDS_PROCESSED_TABLE, RDS_RAW_TABLE, RDS_RESERVED_TABLE, RESERVE, SERVICE_FEE, SILENCE
+from config import CHAT_ID_PRIORITY_ONE, EXCEL_KEYWORDS_PATH, OPTION_NEW_TABLE, RDS_CALCULATED_TABLE, RDS_PROCESSED_TABLE, RDS_RAW_TABLE, RDS_RESERVED_TABLE, RESERVE, SERVICE_FEE, SILENCE
 from create_new_tables import create_tables_if_exists_drop
 from excel.import_keywords import import_keywords
 from rds.calculated.calculated_table import write_calculated_table
@@ -12,7 +12,7 @@ from service.calculate_dicts import calculate_dicts
 from service.find_new_article import find_new_article_ids
 from service.process_dicts import process_dicts
 from service.raw_dicts import minimum_dicts
-from service.send_reserve import send_reserve_all
+from service.send_reserve import send_reserve_all, tele
 
 # change id and pw
 
@@ -49,11 +49,12 @@ def write(raw_table, processed_table, calculated_table, reserved_table, option_n
 def restart_if_error():
     while(True):
         try:
+            tele(CHAT_ID_PRIORITY_ONE, "크롤링 시작")
             write(RDS_RAW_TABLE, RDS_PROCESSED_TABLE, RDS_CALCULATED_TABLE, RDS_RESERVED_TABLE, OPTION_NEW_TABLE)
         except KeyboardInterrupt as error:
             print("keybord: ", error)
             break
         except Exception:
-            print("some error")
+            tele(CHAT_ID_PRIORITY_ONE, "오류로 인한 크롤링 종료")
 
 restart_if_error()

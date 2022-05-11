@@ -8,4 +8,4 @@ import telegram
 
 bot = telegram.Bot(token = TELE_API_KEY)
 text = '안녕하세요'
-bot.sendMessage(chat_id = "-1001660821686", text=text)
+bot.sendMessage(chat_id = "5323620125", text=text)
