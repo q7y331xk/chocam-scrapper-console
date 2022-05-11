@@ -98,7 +98,6 @@ def send_reserve(dict, driver, profit):
     if status == "판매":
         if dict['profit']:
             if dict['profit'] > profit + 10000000:
-                print('priority 1')
                 seoul = is_seoul(div, gu, SEOUL_GUS)
                 unknown = location_unknown(div, gu)
                 if seoul or unknown:
@@ -119,7 +118,6 @@ def send_reserve(dict, driver, profit):
                 else:
                     return 301
             elif dict['profit'] > profit:
-                print('priority 2')
                 seoul = is_seoul(div, gu, SEOUL_GUS)
                 unknown = location_unknown(div, gu)
                 if seoul or unknown:

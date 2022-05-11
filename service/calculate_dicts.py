@@ -5,7 +5,7 @@ def find_model_target_price(model_name, target_prices):
     for target_price in target_prices:
         if model_name == target_price['model']:
             model_prices['filter_price'] = target_price['price']
-            model_prices['fair_price'] = target_price['price']
+            model_prices['fair_price'] = target_price['fair_price']
             break
     return model_prices
 

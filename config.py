@@ -9,7 +9,7 @@ CHAT_RESERVE = False
 SERVICE_FEE = 0
 PROFIT = 0
 RESERVE = True # 지금은 테스트용으로 다 나한테 문자오게함
-PRODUCT = False 
+PRODUCT = True 
 NOTICE_PHONE = '01071416956'
 
 # RDS
