@@ -128,7 +128,7 @@ def get_safe_phone(driver):
     
 def get_chat_link(driver):
     driver.find_element(By.CLASS_NAME,'type_chat').click()
-    sleep(1)
+    sleep(3)
     driver.switch_to.window(driver.window_handles[-1])
     i = 0
     while(i < 50):
@@ -147,6 +147,7 @@ def get_chat_link(driver):
         if base_url.find('talk') < 0:
             break
         j = j + 1
+    sleep(1)
     return chat_url
 
 def get_pdp_dicts(driver, article_ids):

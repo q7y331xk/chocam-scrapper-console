@@ -19,7 +19,7 @@ def reserve_chat(driver, phone):
         if btn_send:
             btn_send.click()
         i = i + 1
-    sleep(1)
+    sleep(10)
 
 def reserve_msg(phone, article_id):
     send_url = 'https://apis.aligo.in/send/' 
