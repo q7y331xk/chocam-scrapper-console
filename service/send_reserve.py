@@ -38,40 +38,56 @@ def tele(chat_id, text):
     text = text
     bot.sendMessage(chat_id=chat_id, text=text)
 
-def notice_chat(phone, article_id, dict):
-    model = dict['model']
-    grade = dict['grade']
-    cost = dict['cost']
-    fair_price = dict['fair_price']
-    link = f'https://cafe.naver.com/chocammall/{article_id}'
-    text = f'모델명: {model}({grade})\n금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n채팅 링크: {phone}'
-    tele(CHAT_ID_PRIORITY_ONE, text)
-
 def notice_chat2(phone, article_id, dict):
     model = dict['model']
     grade = dict['grade']
     cost = dict['cost']
+    model_text = dict['text']
     fair_price = dict['fair_price']
     link = f'https://cafe.naver.com/chocammall/{article_id}'
-    text = f'모델명: {model}({grade})\n금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n채팅 링크: {phone}'
-    tele(CHAT_ID_PRIORITY_TWO, text)
+    if model_text == '':
+        text = f'모델명: {model}({grade})\n게시 금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n채팅 링크: {phone}'
+    else:
+        text = f'모델명: {model}({grade})\n게시 금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n채팅 링크: {phone}\n{model_text}'
+    tele(CHAT_ID_PRIORITY_ONE, text)
 
-def notice_msg(phone, article_id, dict):
+def notice_chat1(phone, article_id, dict):
     model = dict['model']
     grade = dict['grade']
     cost = dict['cost']
+    model_text = dict['text']
     fair_price = dict['fair_price']
     link = f'https://cafe.naver.com/chocammall/{article_id}'
-    text = f'모델명: {model}({grade})\n게시 금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n휴대폰 번호: {phone}'
+    if model_text == '':
+        text = f'모델명: {model}({grade})\n게시 금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n채팅 링크: {phone}'
+    else:
+        text = f'모델명: {model}({grade})\n게시 금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n채팅 링크: {phone}\n{model_text}'
     tele(CHAT_ID_PRIORITY_TWO, text)
 
 def notice_msg2(phone, article_id, dict):
     model = dict['model']
     grade = dict['grade']
     cost = dict['cost']
+    model_text = dict['text']
     fair_price = dict['fair_price']
     link = f'https://cafe.naver.com/chocammall/{article_id}'
-    text = f'모델명: {model}({grade})\n게시 금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n휴대폰 번호: {phone}'
+    if model_text == '':
+        text = f'모델명: {model}({grade})\n금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n휴대폰 번호: {phone}'
+    else:
+        text = f'모델명: {model}({grade})\n금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n휴대폰 번호: {phone}\n{model_text}'
+    tele(CHAT_ID_PRIORITY_TWO, text)
+
+def notice_msg1(phone, article_id, dict):
+    model = dict['model']
+    grade = dict['grade']
+    cost = dict['cost']
+    model_text = dict['text']
+    fair_price = dict['fair_price']
+    link = f'https://cafe.naver.com/chocammall/{article_id}'
+    if model_text == '':
+        text = f'모델명: {model}({grade})\n금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n휴대폰 번호: {phone}'
+    else:
+        text = f'모델명: {model}({grade})\n금액: {cost}\n적정 금액: {fair_price}\n제품 링크: {link}\n휴대폰 번호: {phone}\n{model_text}'
     tele(CHAT_ID_PRIORITY_ONE, text)
 
 def is_seoul(div, gu, seoul_gus):
@@ -89,16 +105,57 @@ def location_unknown(div, gu):
         unknown = True
     return unknown
 
-def send_reserve(dict, driver, profit):
+def match_min_price(model, keywords_models):
+    min_price = -1
+    for keywords_model in keywords_models:
+        if keywords_model['model_name'] == model:
+            if keywords_model['min_price']:
+                min_price = keywords_model['min_price']
+            break
+    return min_price
+
+def match_text(model, keywords_models):
+    text = ""
+    for keywords_model in keywords_models:
+        if keywords_model['model_name'] == model:
+            if keywords_model['text']:
+                text = keywords_model['text'].replace('\\n','\n')
+            break
+    return text
+
+def send_reserve(dict, driver, keywords, profit):
     phone = dict['phone']
     article_id = dict['article_id']
     div = dict['div']
     gu = dict['gu']
     status = dict['status']
     cost = dict['cost']
+    dict['min_price'] = match_min_price(dict['model'], keywords['models'])
+    dict['text'] = match_text(dict['model'], keywords['models'])
     if status == "판매":
         if dict['profit']:
-            if dict['profit'] > profit + 10000000:
+            if (dict['profit'] > profit + 10000000) and (cost >= dict['min_price']):
+                seoul = is_seoul(div, gu, SEOUL_GUS)
+                unknown = location_unknown(div, gu)
+                if seoul or unknown:
+                    ####
+                    if phone.find('talk') > 0:
+                        if PRODUCT:
+                            reserve_chat(driver, phone)
+                        notice_chat1(phone, article_id, dict)
+                        print('reserved with chat')
+                        return 120
+                    else:
+                        phone_remove_hypen = phone.replace('-','')
+                        if PRODUCT:
+                            reserve_msg(phone_remove_hypen, article_id)
+                        notice_msg1(phone_remove_hypen, article_id, dict)
+                        print('reserved with msg')
+                        return 110
+                    ###
+                else:
+                    return 302 # not seoul
+            elif (dict['profit'] > profit) and (cost >= dict['min_price']):
                 seoul = is_seoul(div, gu, SEOUL_GUS)
                 unknown = location_unknown(div, gu)
                 if seoul or unknown:
@@ -108,50 +165,31 @@ def send_reserve(dict, driver, profit):
                             reserve_chat(driver, phone)
                         notice_chat2(phone, article_id, dict)
                         print('reserved with chat')
+                        return 140
                     else:
                         phone_remove_hypen = phone.replace('-','')
                         if PRODUCT:
                             reserve_msg(phone_remove_hypen, article_id)
                         notice_msg2(phone_remove_hypen, article_id, dict)
                         print('reserved with msg')
-                    return 100
-                ###
+                        return 130
+                    ###
                 else:
-                    return 301
-            elif dict['profit'] > profit:
-                seoul = is_seoul(div, gu, SEOUL_GUS)
-                unknown = location_unknown(div, gu)
-                if seoul or unknown:
-                    ####
-                    if phone.find('talk') > 0:
-                        if PRODUCT:
-                            reserve_chat(driver, phone)
-                        notice_chat(phone, article_id, dict)
-                        print('reserved with chat')
-                    else:
-                        phone_remove_hypen = phone.replace('-','')
-                        if PRODUCT:
-                            reserve_msg(phone_remove_hypen, article_id)
-                        notice_msg(phone_remove_hypen, article_id, dict)
-                        print('reserved with msg')
-                    return 100
-                ###
-                else:
-                    return 301
+                    return 302 # not seuol
             else:
-                return 300 # expensive
+                return 301 # not in price range
         else:
             return 401 # no model fair price
     else:
         return 402 # not for sale
 
-def send_reserve_all(driver, dicts_calculated, reserve):
+def send_reserve_all(driver, dicts_calculated, keywords, reserve):
     dicts_reserved = []
     for dict_calculated in dicts_calculated:
         dict_reserved = copy.deepcopy(dict_calculated)
         dict_reserved['reserve'] = 0
         if reserve:
-            dict_reserved['reserve'] = send_reserve(dict_reserved, driver, PROFIT)
+            dict_reserved['reserve'] = send_reserve(dict_reserved, driver, keywords, PROFIT)
         dicts_reserved.append(dict_reserved)
     return dicts_reserved
         

@@ -42,7 +42,7 @@ def write(raw_table, processed_table, calculated_table, reserved_table, option_n
         write_processed_table(dicts_processed, processed_table)
         dicts_calculated = calculate_dicts(dicts_processed, target_prices)
         write_calculated_table(dicts_calculated, calculated_table)
-        dicts_reserved = send_reserve_all(driver, dicts_calculated, RESERVE)
+        dicts_reserved = send_reserve_all(driver, dicts_calculated, keywords, RESERVE)
         write_reserved_table(dicts_reserved, reserved_table)
         print('added')
 
@@ -52,10 +52,11 @@ def restart_if_error():
             tele(CHAT_ID_PRIORITY_ONE, "크롤링 시작")
             write(RDS_RAW_TABLE, RDS_PROCESSED_TABLE, RDS_CALCULATED_TABLE, RDS_RESERVED_TABLE, OPTION_NEW_TABLE)
         except KeyboardInterrupt as error:
+            tele(CHAT_ID_PRIORITY_ONE, "의도된 크롤링 종료")
             print("keybord: ", error)
             break
         except Exception:
             tele(CHAT_ID_PRIORITY_ONE, "오류로 인한 크롤링 종료")
 
-restart_if_error()
-# write(RDS_RAW_TABLE, RDS_PROCESSED_TABLE, RDS_CALCULATED_TABLE, RDS_RESERVED_TABLE, OPTION_NEW_TABLE)
+# restart_if_error()
+write(RDS_RAW_TABLE, RDS_PROCESSED_TABLE, RDS_CALCULATED_TABLE, RDS_RESERVED_TABLE, OPTION_NEW_TABLE)
