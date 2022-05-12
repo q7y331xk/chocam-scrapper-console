@@ -4,7 +4,7 @@ from time import sleep
 import requests
 import json
 from selenium.webdriver.common.by import By
-from config import CHAT_ID_PRIORITY_ONE, CHAT_ID_PRIORITY_TWO, NOTICE_PHONE, PRODUCT, PROFIT
+from config import CHAT_ID_PRIORITY_ONE, CHAT_ID_PRIORITY_TWO, PRODUCT, PROFIT, SENDER_PHONE
 from variables import SEOUL_GUS
 from config import TELE_API_KEY
 import telegram
@@ -25,7 +25,7 @@ def reserve_msg(phone, article_id):
     send_url = 'https://apis.aligo.in/send/' 
     sms_data={'key': 'lojil01d9l07fj51lllttduubepsvwzf', #api key
             'userid': 'oden0317', # 알리고 사이트 아이디
-            'sender': '01071416956', # 발신번호
+            'sender': SENDER_PHONE, # 발신번호
             'receiver': f'{phone}', # 수신번호 (,활용하여 1000명까지 추가 가능)
             'msg': f'상품에 관심있어 연락드려요.https://cafe.naver.com/chocammall/{article_id}', #문자 내용 
             'msg_type' : 'msg_type', #메세지 타입 (SMS, LMS)

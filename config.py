@@ -5,12 +5,12 @@
 # OPTIONS
 OPTION_NEW_TABLE = False
 SILENCE = False
-CHAT_RESERVE = True
+CHAT_RESERVE = False
 SERVICE_FEE = 0
 PROFIT = 0
-RESERVE = True
-PRODUCT = False 
-NOTICE_PHONE = '01071416956'
+RESERVE = True # filtering
+PRODUCT = False  # send reserve
+SENDER_PHONE = '01071416956'
 
 # RDS
 RDS_HOST = 'oden-second-hands-selling.ctj9mgachfi3.ap-northeast-2.rds.amazonaws.com'
