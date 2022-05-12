@@ -95,6 +95,7 @@ def send_reserve(dict, driver, profit):
     div = dict['div']
     gu = dict['gu']
     status = dict['status']
+    cost = dict['cost']
     if status == "판매":
         if dict['profit']:
             if dict['profit'] > profit + 10000000:
