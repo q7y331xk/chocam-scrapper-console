@@ -9,16 +9,17 @@ def import_models(wb):
         brand = row[0].value
         model_name = row[1].value
         additional_keywords_str = row[2].value
-        filter_price = row[3].value 
-        fair_price = row[4].value
+        priority = row[3].value 
+        max_price = row[4].value
         min_price = row[5].value
-        text = row[6].value
+        fair_price = row[6].value
+        text = row[7].value
         if additional_keywords_str:
             additional_keywords = additional_keywords_str.split(',')
         else:
             additional_keywords = additional_keywords_str
         if model_name:
-            model = dict(brand=brand, model_name=model_name, additional_keywords=additional_keywords, filter_price=filter_price, fair_price=fair_price, min_price=min_price, text=text)
+            model = dict(brand=brand, model_name=model_name, additional_keywords=additional_keywords, priority=priority, max_price=max_price, fair_price=fair_price, min_price=min_price, text=text)
             models.append(model)
     return models
 

@@ -12,7 +12,7 @@ from service.calculate_dicts import calculate_dicts
 from service.find_new_article import find_new_article_ids
 from service.process_dicts import process_dicts
 from service.raw_dicts import minimum_dicts
-from service.send_reserve import send_reserve_all, tele
+from service.send_reserve import reserve_dicts, tele
 
 # change id and pw
 
@@ -42,7 +42,7 @@ def write(raw_table, processed_table, calculated_table, reserved_table, option_n
         write_processed_table(dicts_processed, processed_table)
         dicts_calculated = calculate_dicts(dicts_processed, target_prices)
         write_calculated_table(dicts_calculated, calculated_table)
-        dicts_reserved = send_reserve_all(driver, dicts_calculated, keywords, RESERVE)
+        dicts_reserved = reserve_dicts(driver, dicts_calculated, keywords, RESERVE)
         write_reserved_table(dicts_reserved, reserved_table)
         print('added')
 
@@ -57,7 +57,6 @@ def restart_if_error():
             break
         except Exception:
             print(Exception)
-            sleep()
             tele(CHAT_ID_PRIORITY_ONE, "오류로 인한 크롤링 종료")
 
 # restart_if_error()

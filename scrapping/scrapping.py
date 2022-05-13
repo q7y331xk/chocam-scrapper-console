@@ -1,8 +1,10 @@
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
 from time import sleep
+from selenium.webdriver.common.alert import Alert
 
 from config import CHAT_RESERVE
+from naver_chat import remove_chats
 
 def get_article_ids(driver):
     article_ids = []
@@ -125,29 +127,48 @@ def get_safe_phone(driver):
             safe_phone = phone_strip[idx : idx + 13]
             return safe_phone
         i = i + 1
-    
+
+def handle_tempt(alert_msg):
+    is_tempt = alert_msg.find('일시적') > -1
+    if is_tempt:
+        sleep(20)
+
+# not use
+def handle_chat_full(alert_msg):
+    return 0
+
+# not use
 def get_chat_link(driver):
     driver.find_element(By.CLASS_NAME,'type_chat').click()
-    sleep(3)
-    driver.switch_to.window(driver.window_handles[-1])
-    i = 0
-    while(i < 50):
-        sleep(0.1)
-        chat_url = driver.current_url
-        if chat_url.find('talk') > 0:
-            sleep(0.1)
-            driver.close()
-            break
-        i = i + 1
-    j = 0
-    while (j < 50):
-        sleep(0.1)
-        driver.switch_to.window(driver.window_handles[0])
-        base_url = driver.current_url
-        if base_url.find('talk') < 0:
-            break
-        j = j + 1
     sleep(1)
+    try:
+        alert = Alert(driver)
+        alert_msg = alert.text
+        print(alert_msg)
+        handle_chat_full(alert_msg)
+        handle_tempt(alert_msg)
+    except:
+        print('no')
+        driver.switch_to.window(driver.window_handles[-1])
+        i = 0
+        while(i < 50):
+            sleep(0.1)
+            chat_url = driver.current_url
+            if chat_url.find('talk') > 0:
+                sleep(0.1)
+                driver.close()
+                break
+            i = i + 1
+        j = 0
+        while (j < 50):
+            sleep(0.1)
+            driver.switch_to.window(driver.window_handles[0])
+            base_url = driver.current_url
+            if base_url.find('talk') < 0:
+                break
+            j = j + 1
+        sleep(1)
+    sleep(10)
     return chat_url
 
 def get_pdp_dicts(driver, article_ids):
@@ -159,8 +180,5 @@ def get_pdp_dicts(driver, article_ids):
         pdp_dict = convert_soup_to_dict(pdp_soup_obj)
         if pdp_dict["phone"] == '***-****-****':
             pdp_dict["phone"] = get_safe_phone(driver)
-        if CHAT_RESERVE:
-            if pdp_dict["phone"] == 'chat':
-                pdp_dict["phone"] = get_chat_link(driver)
         pdp_dicts.append(pdp_dict)
     return pdp_dicts

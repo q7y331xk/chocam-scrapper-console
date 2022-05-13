@@ -5,11 +5,11 @@
 # OPTIONS
 OPTION_NEW_TABLE = False
 SILENCE = False
-CHAT_RESERVE = False
+CHAT_RESERVE = True
 SERVICE_FEE = 0
 PROFIT = 0
-RESERVE = True # filtering
-PRODUCT = False  # send reserve
+RESERVE = True  # filter reserve
+CONTACT = True  # send reserve
 SENDER_PHONE = '01071416956'
 
 # RDS

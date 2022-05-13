@@ -1,10 +1,10 @@
 import copy
 
 def find_model_target_price(model_name, target_prices):
-    model_prices = dict(filter_price=None, fair_price=None)
+    model_prices = dict(max_price=None, fair_price=None)
     for target_price in target_prices:
         if model_name == target_price['model']:
-            model_prices['filter_price'] = target_price['price']
+            model_prices['max_price'] = target_price['price']
             model_prices['fair_price'] = target_price['fair_price']
             break
     return model_prices
@@ -14,7 +14,7 @@ def calculate_datum(dict_processed, target_prices):
     target_prices = find_model_target_price(dict_calculated['model'],target_prices)
     fair_price = None
     profit = None
-    target_price = target_prices['filter_price']
+    target_price = target_prices['max_price']
     fair_price = target_prices['fair_price']
     if target_price:
         profit = target_price - dict_calculated['cost']
