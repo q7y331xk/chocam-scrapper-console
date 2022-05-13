@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
 from time import sleep
 from selenium.webdriver.common.alert import Alert
-from naver_chat import remove_chats
+from scrapping.naver_chat import remove_chats
 
 def get_article_ids(driver):
     article_ids = []
