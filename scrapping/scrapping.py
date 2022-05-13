@@ -126,16 +126,22 @@ def get_safe_phone(driver):
             return safe_phone
         i = i + 1
 
-def handle_tempt():
+def handle_tempt(alert):
+    alert.accept()
+    alert.dismiss()
     print("채팅: 일시적 제한")
     sleep(60 * 60)
 
-def handle_chat_full():
+def handle_chat_full(alert):
+    alert.accept()
+    alert.dismiss()
     print("채팅: 방 수 초과 ")
     remove_chats(15)
     return 0
 
-def handle_one_minute():
+def handle_one_minute(alert):
+    alert.accept()
+    alert.dismiss()
     print("채팅: 1분안에 너무 많은 방 개설")
     sleep(60 * 1)
 
@@ -151,13 +157,13 @@ def open_chat(driver, article_id):
         alert_msg = alert.text
         print(alert_msg)
         if alert_msg.find("초과") > -1:
-            handle_chat_full()
+            handle_chat_full(alert)
             open_chat(driver, article_id)
         elif alert_msg.find("일시적") > -1:
-            handle_tempt()
+            handle_tempt(alert)
             open_chat(driver, article_id)
         elif alert_msg.find("1분") > -1:
-            handle_one_minute()
+            handle_one_minute(alert)
             open_chat(driver, article_id)
     except:
         print('채팅방 열기 성공')
