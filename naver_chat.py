@@ -21,7 +21,6 @@ def remove_chat_by_idx(driver, reads, idx):
     sleep(1)
         
 def remove_chats(chats_cnt):
-    
     driver = get_chat()
     sleep(1)
     reads = driver.find_elements(By.CLASS_NAME,'read')

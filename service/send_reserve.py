@@ -5,21 +5,15 @@ import requests
 import json
 from selenium.webdriver.common.by import By
 from config import CHAT_ID_PRIORITY_ONE, CHAT_ID_PRIORITY_TWO, CONTACT, SENDER_PHONE
+from scrapping.scrapping import contact_by_chat
 from variables import SEOUL_GUS
 from config import TELE_API_KEY
 import telegram
 
 
-def reserve_chat(driver, phone):
-    driver.get(phone)
-    i = 0
-    while (i < 50):
-        sleep(0.1)
-        btn_send = driver.find_element(By.CLASS_NAME,'btn_send')
-        if btn_send:
-            btn_send.click()
-        i = i + 1
-    sleep(10)
+def reserve_chat(driver, article_id):
+    chat_url = contact_by_chat(driver, article_id)
+    return chat_url
 
 def reserve_msg(phone, article_id):
     send_url = 'https://apis.aligo.in/send/' 
@@ -125,14 +119,14 @@ def match_text(model, keywords_models):
 def send_reserve(driver, dict):
     phone = dict['phone']
     article_id = dict['article_id']
-    if phone.find('talk') == -1:
+    if phone.find('chat') == -1:
         phone_remove_hypen = phone.replace('-','')
         reserve_msg(phone_remove_hypen, article_id)
         print('reserved with msg')
     else:
-        reserve_chat(driver, phone)
+        chat_url = reserve_chat(driver, article_id)
         print('reserved with chat')
-    return 120
+        dict['phone'] = chat_url
 
 def send_notice(dict, contact, chat_id):
     phone = dict['phone']

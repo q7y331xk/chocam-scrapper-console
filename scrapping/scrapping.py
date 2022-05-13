@@ -2,8 +2,6 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
 from time import sleep
 from selenium.webdriver.common.alert import Alert
-
-from config import CHAT_RESERVE
 from naver_chat import remove_chats
 
 def get_article_ids(driver):
@@ -128,47 +126,73 @@ def get_safe_phone(driver):
             return safe_phone
         i = i + 1
 
-def handle_tempt(alert_msg):
-    is_tempt = alert_msg.find('일시적') > -1
-    if is_tempt:
-        sleep(20)
+def handle_tempt():
+    print("채팅: 일시적 제한")
+    sleep(60 * 60)
 
-# not use
-def handle_chat_full(alert_msg):
+def handle_chat_full():
+    print("채팅: 방 수 초과 ")
+    remove_chats(15)
     return 0
 
-# not use
-def get_chat_link(driver):
+def handle_one_minute():
+    print("채팅: 1분안에 너무 많은 방 개설")
+    sleep(60 * 1)
+
+def open_chat(driver, article_id):
+    driver.get(f"https://cafe.naver.com/chocammall?iframe_url_utf8=%2FArticleRead.nhn%253Fclubid%3D20486145%2526page%3D1%2526menuid%3D214%2526boardtype%3DL%2526articleid%3D{article_id}%2526referrerAllArticles%3Dfalse")
+    sleep(3)
+    driver.switch_to.frame('cafe_main')
+    sleep(3)
     driver.find_element(By.CLASS_NAME,'type_chat').click()
-    sleep(1)
+    sleep(3)
     try:
         alert = Alert(driver)
         alert_msg = alert.text
         print(alert_msg)
-        handle_chat_full(alert_msg)
-        handle_tempt(alert_msg)
+        if alert_msg.find("초과") > -1:
+            handle_chat_full()
+            open_chat(driver, article_id)
+        elif alert_msg.find("일시적") > -1:
+            handle_tempt()
+            open_chat(driver, article_id)
+        elif alert_msg.find("1분") > -1:
+            handle_one_minute()
+            open_chat(driver, article_id)
     except:
-        print('no')
-        driver.switch_to.window(driver.window_handles[-1])
-        i = 0
-        while(i < 50):
+        print('채팅방 열기 성공')
+    
+def contact_by_chat(driver, article_id):
+    open_chat(driver, article_id)
+    sleep(1)
+    driver.switch_to.window(driver.window_handles[-1])
+    sleep(1)
+    i = 0
+    while(i < 50):
+        sleep(0.1)
+        chat_url = driver.current_url
+        if chat_url.find('talk') > 0:
             sleep(0.1)
-            chat_url = driver.current_url
-            if chat_url.find('talk') > 0:
+            k = 0
+            while (k < 50):
                 sleep(0.1)
-                driver.close()
-                break
-            i = i + 1
-        j = 0
-        while (j < 50):
+                btn_send = driver.find_element(By.CLASS_NAME,'btn_send')
+                if btn_send:
+                    btn_send.click()
+                k = k + 1
             sleep(0.1)
-            driver.switch_to.window(driver.window_handles[0])
-            base_url = driver.current_url
-            if base_url.find('talk') < 0:
-                break
-            j = j + 1
-        sleep(1)
-    sleep(10)
+            driver.close()
+            break
+        i = i + 1
+    j = 0
+    while (j < 50):
+        sleep(0.1)
+        driver.switch_to.window(driver.window_handles[0])
+        base_url = driver.current_url
+        if base_url.find('talk') < 0:
+            break
+        j = j + 1
+    sleep(30)
     return chat_url
 
 def get_pdp_dicts(driver, article_ids):

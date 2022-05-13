@@ -29,8 +29,8 @@ EXCEL_KEYWORDS_NAME = 'keywords'
 EXCEL_KEYWORDS_PATH = f"/Users/duckyounglee/Documents/{EXCEL_KEYWORDS_NAME}.xlsx"
 
 # Naver Login
-NAVER_ID = 'q7y331xk'
-NAVER_PW = 'f7gh18Sh94#'
+NAVER_ID = 'oden0317'
+NAVER_PW = 'Dhems2021!'
 
 # telegram
 TELE_API_KEY = "5362630249:AAHPegjrSozzmEUlL_DQGlfJ-Roccmm7Cd4"
