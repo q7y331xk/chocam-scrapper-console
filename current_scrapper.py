@@ -6,7 +6,7 @@ from rds.processed.processed_table import write_processed_table
 from rds.raw.raw_table import write_raw_table
 from rds.reserved.reserved_table import write_reserved_table
 from scrapping.scrapping import get_pdp_dicts
-from auth.auth import naver_login, set_cookies
+from auth.auth import naver_login
 from service.calc_target_prices import calc_target_prices
 from service.calculate_dicts import calculate_dicts
 from service.find_new_article import find_new_article_ids
