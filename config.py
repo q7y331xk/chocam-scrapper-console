@@ -1,3 +1,6 @@
+from datetime import datetime
+from time import strftime
+
 # 현재 챗은 CHAT_RESERVE = False로 막아둠
 # 구매 예약 문자는 다 내폰으로
 
@@ -11,6 +14,7 @@ PROFIT = 0
 RESERVE = True  # filter reserve
 CONTACT = True  # send reserve
 SENDER_PHONE = '01071416956'
+TODAY = datetime.today().strftime('%Y%m%d')
 
 # RDS
 RDS_HOST = 'oden-second-hands-selling.ctj9mgachfi3.ap-northeast-2.rds.amazonaws.com'
@@ -23,10 +27,10 @@ RDS_CALCULATED_TABLE = 'current_calculated'
 RDS_RESERVED_TABLE = 'current_reserved'
 
 # EXCEL
-EXCEL_FILE_NAME = 'current_reserved1'
+EXCEL_FILE_NAME = f'current_reserved_{TODAY}'
 EXCEL_SAVE_PATH = f"/Users/duckyounglee/Documents/{EXCEL_FILE_NAME}.xlsx"
-EXCEL_KEYWORDS_NAME = 'keywords'
-EXCEL_KEYWORDS_PATH = f"/Users/duckyounglee/Documents/{EXCEL_KEYWORDS_NAME}.xlsx"
+EXCEL_KEYWORDS_NAME = 'keywords_0517'
+EXCEL_KEYWORDS_PATH = f"/Users/duckyounglee/Documents/keywords/{EXCEL_KEYWORDS_NAME}.xlsx"
 
 # Naver Login
 NAVER_ID = 'oden0317'

@@ -21,9 +21,9 @@ def write_excel(columns, rows, title="default"):
         j = 0
         while (j < col_length):
             item = row[j]
-            ws.cell(row = i + 1 + 1, column = j + 1).value = item
-            # item_str = str(item)
-            # ws.cell(row = i + 1 + 1, column = j + 1).value = ILLEGAL_CHARACTERS_RE.sub(r'', item_str)
+            # ws.cell(row = i + 1 + 1, column = j + 1).value = item
+            item_str = str(item)
+            ws.cell(row = i + 1 + 1, column = j + 1).value = ILLEGAL_CHARACTERS_RE.sub(r'', item_str)
             j = j + 1
         i = i + 1
     wb.save(EXCEL_SAVE_PATH)
