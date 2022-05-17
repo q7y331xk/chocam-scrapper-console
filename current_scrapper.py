@@ -55,9 +55,10 @@ def restart_if_error():
             tele(CHAT_ID_PRIORITY_ONE, "의도된 크롤링 종료")
             print("keybord: ", error)
             break
-        except Exception:
-            print(Exception)
+        except Exception as ex:
+            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)
             tele(CHAT_ID_PRIORITY_ONE, "오류로 인한 크롤링 종료")
-
 restart_if_error()
 # write(RDS_RAW_TABLE, RDS_PROCESSED_TABLE, RDS_CALCULATED_TABLE, RDS_RESERVED_TABLE, OPTION_NEW_TABLE)
