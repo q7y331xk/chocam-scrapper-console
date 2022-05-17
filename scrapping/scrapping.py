@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from selenium.webdriver.common.by import By
 from time import sleep
 from selenium.webdriver.common.alert import Alert
+from selenium.common.exceptions import UnexpectedAlertPresentException
 from scrapping.naver_chat import remove_chats
 
 def get_article_ids(driver):
@@ -204,7 +205,13 @@ def contact_by_chat(driver, article_id):
 def get_pdp_dicts(driver, article_ids):
     pdp_dicts = []
     for article_id in article_ids:
-        pdp_soup_obj = get_pdp_soup(driver, article_id)
+        try:
+            pdp_soup_obj = get_pdp_soup(driver, article_id)
+        except UnexpectedAlertPresentException as unexpected_alert:
+            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(unexpected_alert).__name__, unexpected_alert.args)
+            print(message)
+            continue
         if pdp_soup_obj["pdp_soup"] == 'pass':
             continue
         pdp_dict = convert_soup_to_dict(pdp_soup_obj)
