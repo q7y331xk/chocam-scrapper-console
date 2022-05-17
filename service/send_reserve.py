@@ -173,7 +173,11 @@ def reserve_dict(dict, driver, keywords):
                 else:
                     code = send_notice(dict, False, CHAT_ID_PRIORITY_ONE) # send notice 111
             if priority == 2:
-                code = send_notice(dict, False, CHAT_ID_PRIORITY_TWO) # send notice 111
+                if (dict['cost'] > dict['min_price']):
+                    code = send_notice(dict, False, CHAT_ID_PRIORITY_TWO) # send notice 111
+                else:
+                    code = 112 # dont send notice priority 2 low price
+
         else:
             code = 403 # not in target
     return code
