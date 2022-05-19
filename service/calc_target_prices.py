@@ -3,7 +3,7 @@ def calc_price_with_model(model, service_fee):
     max_price = model['max_price']
     fair_price = model['fair_price']
     if max_price:
-        target_price = max_price - service_fee
+        target_price = int(max_price) - service_fee
     else:
         target_price = None
     price_with_model = dict(model=model_name, price=target_price, fair_price=fair_price)
