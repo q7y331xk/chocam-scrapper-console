@@ -181,7 +181,6 @@ def reserve_dict(dict, driver, keywords):
         else:
             code = 403 # not in target
     return code
-        
 
 def reserve_dicts(driver, dicts_calculated, keywords, reserve):
     dicts_reserved = []

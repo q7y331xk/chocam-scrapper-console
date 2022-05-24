@@ -10,7 +10,7 @@ def get_article_ids(driver):
     driver.get(f"https://cafe.naver.com/chocammall?iframe_url=/ArticleList.nhn%3Fsearch.clubid=20486145%26search.menuid=214%26search.boardtype=L")
     i = 0
     while(True):
-        sleep(0.1)
+        sleep(1)
         i = i + 1
         driver.switch_to.frame('cafe_main')
         board_soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -29,7 +29,7 @@ def get_article_ids(driver):
 
 def get_pdp_soup(driver, article_id):
     driver.get(f"https://cafe.naver.com/chocammall?iframe_url_utf8=%2FArticleRead.nhn%253Fclubid%3D20486145%2526page%3D1%2526menuid%3D214%2526boardtype%3DL%2526articleid%3D{article_id}%2526referrerAllArticles%3Dfalse")
-    sleep(0.1)
+    sleep(1)
     driver.switch_to.frame('cafe_main')
     while True:
         i = 0
@@ -45,10 +45,10 @@ def get_pdp_soup(driver, article_id):
             error = pdp_soup.find('div', {'class': 'error_content'})
             if error:
                 driver.get(f"https://cafe.naver.com/chocammall?iframe_url_utf8=%2FArticleRead.nhn%253Fclubid%3D20486145%2526page%3D1%2526menuid%3D214%2526boardtype%3DL%2526articleid%3D{article_id}%2526referrerAllArticles%3Dfalse")
-                sleep(0.1)
+                sleep(1)
                 driver.switch_to.frame('cafe_main')
                      
-        sleep(0.1)
+        sleep(1)
         i = i + 1
         if i > 50:
             driver.get(f"https://cafe.naver.com/chocammall?iframe_url_utf8=%2FArticleRead.nhn%253Fclubid%3D20486145%2526page%3D1%2526menuid%3D214%2526boardtype%3DL%2526articleid%3D{article_id}%2526referrerAllArticles%3Dfalse")
@@ -117,7 +117,7 @@ def get_safe_phone(driver):
     driver.find_element(By.CLASS_NAME,'btn_text').click()
     i = 0
     while(i < 50):
-        sleep(0.1)
+        sleep(1)
         pdp_soup = BeautifulSoup(driver.page_source, 'html.parser')
         phone = pdp_soup.find('p', {'class':'tell'})
         phone_strip = phone.text.strip()
@@ -176,24 +176,24 @@ def contact_by_chat(driver, article_id):
     sleep(1)
     i = 0
     while(i < 50):
-        sleep(0.1)
+        sleep(1)
         chat_url = driver.current_url
         if chat_url.find('talk') > 0:
-            sleep(0.1)
+            sleep(1)
             k = 0
             while (k < 50):
-                sleep(0.1)
+                sleep(1)
                 btn_send = driver.find_element(By.CLASS_NAME,'btn_send')
                 if btn_send:
                     btn_send.click()
                 k = k + 1
-            sleep(0.1)
+            sleep(1)
             driver.close()
             break
         i = i + 1
     j = 0
     while (j < 50):
-        sleep(0.1)
+        sleep(1)
         driver.switch_to.window(driver.window_handles[0])
         base_url = driver.current_url
         if base_url.find('talk') < 0:

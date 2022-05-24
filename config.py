@@ -29,7 +29,7 @@ RDS_RESERVED_TABLE = 'current_reserved'
 # EXCEL
 EXCEL_FILE_NAME = f'current_reserved_{TODAY}'
 EXCEL_SAVE_PATH = f"/Users/duckyounglee/Documents/{EXCEL_FILE_NAME}.xlsx"
-EXCEL_KEYWORDS_NAME = 'keywords_220518_1130'
+EXCEL_KEYWORDS_NAME = 'keywords_220524_1030'
 EXCEL_KEYWORDS_PATH = f"/Users/duckyounglee/Documents/keywords/{EXCEL_KEYWORDS_NAME}.xlsx"
 
 # Naver Login
